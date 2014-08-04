@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from sklearn.preprocessing import Imputer
 import fileinput
 
