@@ -1,8 +1,11 @@
 #!/usr/bin/env python
+
 from sklearn.preprocessing import Imputer
 from sklearn import preprocessing
+import scipy.sparse as sp
 import fileinput
 import numpy
+
 
 def imputer():
     train = []
@@ -15,13 +18,21 @@ def imputer():
 
     imp = Imputer(missing_values='NaN', strategy='mean', axis=0)
 #    print train
-    imp.fit(train)
-#    print train
-    train = imp.transform(train)
-    train = preprocessing.scale(train)
+#    train = sp.csc_matrix(train)
+    imp.fit(train[:10000])
+    results = []
+    while train:
+        results.extend(imp.transform(train[:10000]))
+        del train[:10000]
 
-#    print train
+    #train = [imp.transform(train[k:k+10000]) for k in xrange(0, len(train), 10000)] 
+    #train = imp.transform(train)
+#    train = preprocessing.scale(results)
 
+#    h, w =  train.shape
+
+#    for index in xrange(h):
+#        iline = train.getrow(index).toarray()[0]
     for iline in train:
         print ",".join(map(str, iline))
 
