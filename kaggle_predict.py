@@ -15,9 +15,12 @@ def predict():
         
         ids.append(t)
         tests.append(v)
-
-    p_test = clf.predict_proba(tests)
     
+    p_test = []
+    while tests:
+        p_test.extend( clf.predict_proba(tests[:10000]))
+        del tests[:10000]        
+
     for a, b in izip(ids, p_test):
         print ','.join(map(str, [a, b[1]]))
         

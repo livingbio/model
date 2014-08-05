@@ -24,7 +24,7 @@ from itertools import izip
 def train():
     target, train = io()
 
-    clf = RandomForestClassifier(n_jobs=4)
+    clf = RandomForestClassifier(n_jobs=12, n_estimators=10)
     clf.fit(train, target)
     p_target = clf.predict_proba(train)
     #scores = cross_val_score(clf, train, target)
