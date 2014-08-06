@@ -17,11 +17,12 @@ def label():
 
         vs.append(iline)
 
-    c = [(label, index) for (label, freq), index in enumerate(c.most_common()) if freq > 1000]
-
+    c.pop('')
+    c = {label: index for index, (label, freq) in enumerate(c.most_common()) if freq > threshold}
+    print c
     # Label
     for iline in vs:
-        print ",".join(map(lambda k: c.get(k,""), iline))
+        print ",".join(map(lambda k: str(c.get(k,"")), iline))
 
 if __name__ == "__main__":
     label()
