@@ -4,6 +4,7 @@ import dio
 import random
 
 def sample(name='sample', ratio=0.99):
+    ratio = float(ratio)
     with open('%s.train.csv'%name, 'w') as train, open('%s.test.csv'%name, 'w') as test:
         for iline in dio.io():
             if random.random() < ratio:
