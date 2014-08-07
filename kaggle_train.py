@@ -35,4 +35,4 @@ def train(n_estimators = 100, **kwargs):
     joblib.dump(clf, 'train.pkl', compress=9)
 
 if __name__ == "__main__":
-    import clime.now
+    dio.now('train')

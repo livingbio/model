@@ -27,4 +27,4 @@ def predict():
         
 
 if __name__ == "__main__":
-    import clime.now
+    dio.now('predict')

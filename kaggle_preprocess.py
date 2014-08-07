@@ -33,4 +33,5 @@ def imputer():
         print ",".join(map(str, itrain))
 
 if __name__ == "__main__":
-    import clime.now
+#     import clime.now
+    dio.now('imputer')
