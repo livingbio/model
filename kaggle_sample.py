@@ -13,5 +13,4 @@ def sample(name='sample', ratio=0.99):
 
 
 if __name__ == "__main__":
-    import clime.now
-
+    dio.now('sample')
