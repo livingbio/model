@@ -16,6 +16,8 @@ def convert(v):
             return float(v[:-1])
         elif re_b.match(v):
             return bool(v)
+        elif v == "None":
+            return None
     except:
         pass
     
