@@ -2,13 +2,14 @@
 from sklearn.externals import joblib
 import fileinput
 from itertools import izip
+import dio
 
 def predict():
     clf = joblib.load('train.pkl')
 
     ids = []
     tests = []
-    for iline in fileinput.input():
+    for iline in dio.io():
         vs = iline.split(',')
         t = vs[0]
         v = vs[1:]
@@ -26,4 +27,4 @@ def predict():
         
 
 if __name__ == "__main__":
-    predict()
+    import clime.now
