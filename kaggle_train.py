@@ -5,12 +5,14 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.cross_validation import cross_val_score
 from sklearn.externals import joblib
 from itertools import izip
+import os, sys
+import dio
 
 def io():
     target = []
     train = []
-    
-    for iline in fileinput.input():
+
+    for iline in dio.io():
         iline = iline.strip().split(',')
         t = int(iline[0])
         v = map(float, iline[1:])
@@ -20,10 +22,10 @@ def io():
 
     return target, train 
 
-def train():
+def train(n_estimators = 100, **kwargs):
     target, train = io()
 
-    clf = RandomForestClassifier(n_jobs=-1, n_estimators=100)
+    clf = RandomForestClassifier(n_jobs=-1, n_estimators=n_estimators, **kwargs)
     clf.fit(train, target)
     p_target = clf.predict_proba(train)
 
@@ -33,4 +35,4 @@ def train():
     joblib.dump(clf, 'train.pkl', compress=9)
 
 if __name__ == "__main__":
-    train()
+    import clime.now

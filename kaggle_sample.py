@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
-import fileinput
+import dio
 import random
 
-def sample():
-    ratio = 0.01
+def sample(ratio):
+    ratio = 0.99
     with open('train.samples.csv', 'w') as train, open('test.samples.csv', 'w') as test:
-        for iline in fileinput.input():
+        for iline in dio.io():
             if random.random() < ratio:
                 test.write(iline)
             else:
@@ -14,5 +14,5 @@ def sample():
 
 
 if __name__ == "__main__":
-    sample() 
+    import clime.now()
 
