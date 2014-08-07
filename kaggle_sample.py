@@ -3,9 +3,8 @@
 import dio
 import random
 
-def sample(ratio):
-    ratio = 0.99
-    with open('train.samples.csv', 'w') as train, open('test.samples.csv', 'w') as test:
+def sample(name='sample', ratio=0.99):
+    with open('%s.train.csv'%name, 'w') as train, open('%s.test.csv'%name, 'w') as test:
         for iline in dio.io():
             if random.random() < ratio:
                 test.write(iline)
@@ -14,5 +13,5 @@ def sample(ratio):
 
 
 if __name__ == "__main__":
-    import clime.now()
+    import clime.now
 
