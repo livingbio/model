@@ -2,7 +2,7 @@
 from sklearn.externals import joblib
 import fileinput
 from itertools import izip
-import dio
+from dpipe import dio
 
 def predict():
     clf = joblib.load('train.pkl')
