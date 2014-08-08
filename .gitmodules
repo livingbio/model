@@ -1,0 +1,3 @@
+[submodule "dpipe"]
+	path = dpipe
+	url = https://github.com/Tagtoo/dpipe.git
