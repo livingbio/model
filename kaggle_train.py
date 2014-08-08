@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import fileinput
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import *
 from sklearn.cross_validation import cross_val_score
 from sklearn.externals import joblib
 from itertools import izip
@@ -25,14 +25,15 @@ def io():
 def train(n_estimators = 100, **kwargs):
     target, train = io()
 
-    clf = RandomForestClassifier(n_jobs=-1, n_estimators=n_estimators, **kwargs)
+    clf = RandomForestRegressor(n_jobs=-1, n_estimators=n_estimators, **kwargs)
     clf.fit(train, target)
-    p_target = clf.predict_proba(train)
+    p_target = clf.predict(train)
 
     for a, b in izip(target, p_target):
-        print ','.join(map(str, [a, b[1]]))
+        print a, ',', b
+        #print ','.join(map(str, [a, b[1]]))
      
-    joblib.dump(clf, 'train.pkl', compress=9)
+    joblib.dump(clf, 'train.pkl')
 
 if __name__ == "__main__":
     dio.now('train')

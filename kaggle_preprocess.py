@@ -7,31 +7,19 @@ import scipy.sparse as sp
 import fileinput
 import numpy
 from itertools import izip
-import dio
-    
-def imputer():
-    target = []
-    train = []
+from dpipe import dio
 
+def imputer():
+    vs = []
     for iline in dio.io():
         iline = iline.strip().split(',')
-        t = int(iline[0])
-        v = [(float(x) if x else numpy.NaN) for x in iline[1:]]
-	
-        target.append(t)
-        train.append(v)
+        vs.append([int(x) if x else numpy.NaN for x in iline])
 
     imp = Imputer(missing_values='NaN', strategy='mean', axis=0)
-    train = imp.fit_transform(train)
-    train = preprocessing.scale(train)
+    vs = imp.fit_transform(vs)
 
-#    pca = PCA(whiten=False)
-#    train = pca.fit_transform(train)
-
-    for itarget, itrain in izip(target, train):
-        print itarget, ',',
-        print ",".join(map(str, itrain))
+    for v in vs:
+        print ",".join(map(str, map(int, v)))
 
 if __name__ == "__main__":
-#     import clime.now
     dio.now('imputer')

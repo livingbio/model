@@ -19,7 +19,7 @@ def predict():
     
     p_test = []
     while tests:
-        p_test.extend( clf.predict_proba(tests[:10000]))
+        p_test.extend( clf.predict(tests[:10000]))
         del tests[:10000]        
 
     for a, b in izip(ids, p_test):

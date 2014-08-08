@@ -53,8 +53,6 @@ def train():
     x0 = [0, 1, 0]
     res = minimize(obj, x0, method='nelder-mead', options={'xtol': 1e-8, 'disp': True})
 
-#    print res.x
-#    print obj(res.x)
     for a, p in zip(act, pred):
         print a, ',' , transform(p, res.x)
 
