@@ -32,7 +32,7 @@ def sparse_io():
             col.append(l+13)
             data.append(1)
 
-    #print ri+1, max(col)       
+    #print ri+1, max(col)
     return train, csr_matrix((data, (row, col)), shape=(ri+1, max(col)+1))
 
 
@@ -71,6 +71,20 @@ def train(n_estimators = 100, **kwargs):
         print a, ',', b
 
     joblib.dump(clf, 'train.pkl')
+
+
+def predict():
+    clf = joblib.load('train.pkl')
+
+    ids, tests = io()
+
+    p_test = []
+    while tests:
+        p_test.extend( clf.predict(tests[:10000]))
+        del tests[:10000]
+
+    for a, b in izip(ids, p_test):
+        print ','.join(map(str, [a, b[1]]))
 
 if __name__ == "__main__":
     dio.now('train')
