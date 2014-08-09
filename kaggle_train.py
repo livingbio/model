@@ -14,7 +14,6 @@ def sparse_io():
     col = []
     data = []
     target = []
-#    import pdb; pdb.set_trace()
     for ri, iline in enumerate(dio.io()):
         iline = iline.strip().split(',')
         t = int(iline[0])
@@ -60,7 +59,7 @@ def io():
     return target, train
 
 
-def train(n_estimators = 100, **kwargs):
+def train(model, n_estimators = 100, **kwargs):
     target, train = io()
 #    print target
     clf = RandomForestRegressor(n_jobs=-1, n_estimators=n_estimators, **kwargs)
@@ -70,11 +69,11 @@ def train(n_estimators = 100, **kwargs):
     for a, b in izip(target, p_target):
         print a, ',', b
 
-    joblib.dump(clf, 'train.pkl')
+    joblib.dump(clf, model)
 
 
-def predict():
-    clf = joblib.load('train.pkl')
+def predict(model):
+    clf = joblib.load(model)
 
     ids, tests = io()
 
@@ -87,4 +86,4 @@ def predict():
         print ','.join(map(str, [a, b[1]]))
 
 if __name__ == "__main__":
-    dio.now('train')
+    dio.now()
