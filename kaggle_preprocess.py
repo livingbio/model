@@ -23,7 +23,20 @@ def imputer():
         print ",".join(map(str, map(int, v)))
 
 
-def label(threshold=0.1):
+def label_transform(model):
+    c = {}
+    with open(model) as ifile:
+        for iline in ifile:
+            label, mark = [k.strip() for k in iline.split(',')]
+            c[label] = int(mark)
+
+    for iline in dio.io():
+        iline = iline.strip().split(',')
+        
+        print ','.join(map(str, [c[k] for k in iline if k in c]))
+            
+
+def label_train(threshold=0.1):
     vs = []
     c = Counter()
 
@@ -43,14 +56,17 @@ def label(threshold=0.1):
 
     c = {label: index for index, (label, freq) in enumerate(c.most_common()[:threshold])}
 
-    vs = [[c[i] for i in k if i in c] for k in vs]
+    #vs = [[c[i] for i in k if i in c] for k in vs]
 
-    for v in vs:
-        print ','.join(map(str, v))
+    #for v in vs:
+    #    print ','.join(map(str, v))
 
-    with open('label.model', 'w') as ofile:
-        for label in c:
-            ofile.write('%s,%s\n'%(label, c[label]))
+    for label in c:
+        print label, ',', c[label]
+
+#    with open('label.model', 'w') as ofile:
+#        for label in c:
+#            ofile.write('%s,%s\n'%(label, c[label]))
 
 
 
