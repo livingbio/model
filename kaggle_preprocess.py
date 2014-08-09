@@ -32,11 +32,11 @@ def label_transform(model):
 
     for iline in dio.io():
         iline = iline.strip().split(',')
-        
-        print ','.join(map(str, [c[k] for k in iline if k in c]))
-            
 
-def label_train(threshold=0.1):
+        print ','.join(map(str, [c[k] for k in iline if k in c]))
+
+
+def label_train(model, threshold=0.1):
     vs = []
     c = Counter()
 
@@ -56,18 +56,12 @@ def label_train(threshold=0.1):
 
     c = {label: index for index, (label, freq) in enumerate(c.most_common()[:threshold])}
 
-    #vs = [[c[i] for i in k if i in c] for k in vs]
+    with open(model, 'w') as ofile:
+        for label in c:
+            print >> ofile, label, ',', c[label]
 
-    #for v in vs:
-    #    print ','.join(map(str, v))
-
-    for label in c:
-        print label, ',', c[label]
-
-#    with open('label.model', 'w') as ofile:
-#        for label in c:
-#            ofile.write('%s,%s\n'%(label, c[label]))
-
+    for iline in vs:
+        print ','.join(map(str, [c[k] for k in iline if k in c]))
 
 
 if __name__ == "__main__":
