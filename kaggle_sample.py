@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import dio
+from dpipe import dio
 import random
 
 def sample(name='sample', ratio=0.99):

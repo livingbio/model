@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+from collections import Counter
 from sklearn.preprocessing import Imputer
 from sklearn import preprocessing
 from sklearn.decomposition import PCA
@@ -27,7 +27,7 @@ def label(threshold=0.1):
     vs = []
     c = Counter()
 
-    for iline in fileinput.input():
+    for iline in dio.io():
         iline = iline.strip().split(',')
         c.update(iline)
 
@@ -55,4 +55,4 @@ def label(threshold=0.1):
 
 
 if __name__ == "__main__":
-    dio.now('imputer')
+    dio.now()
