@@ -77,13 +77,14 @@ def predict(model):
 
     ids, tests = io()
 
-    p_test = []
     while tests:
-        p_test.extend( clf.predict(tests[:10000]))
+        results =  clf.predict(tests[:10000])
         del tests[:10000]
 
-    for a, b in izip(ids, p_test):
-        print ','.join(map(str, [a, b[1]]))
+        for a, b in izip(ids, results):
+            print ','.join(map(str, [a, b]))
+
+        del ids[:10000]        
 
 if __name__ == "__main__":
     dio.now()
