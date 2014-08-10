@@ -10,6 +10,7 @@ import os, sys
 from dpipe import dio
 from sklearn.metrics import fbeta_score, make_scorer
 from kaggle_evl import *
+import random
 
 def kaggle_score(act, predict):
     return llfun(act, predict)
@@ -52,20 +53,23 @@ def fake(value=None, **kwargs):
         print a, ',', g()
 
 
-def grid_search(model):
+def tune(model):
     target, train = io()
     forest = RandomForestRegressor(n_jobs=-1)
     parameters = {
-        "n_estimators":[10, 50, 100, 200],
-        "bootstrap" = [True, False],
-        "min_samples_split"= [1],
-        "max_depth"=[None],
-        "max_features"=["auto", None]
+        "n_estimators":[10, 50, 100, 200, 400, 800],
+        "bootstrap":  [True, False],
+        "min_samples_split": [1],
+        "max_depth": [None],
+        "max_features": ["auto", None]
     }
-    clf = grid_search.GridSearchCV(forest, parameters, scoring=scorer, n_jobs=-1)
+    clf = GridSearchCV(forest, parameters, scoring=scorer, n_jobs=-1)
     clf.fit(train, target)
 
+    print clf.grid_scores_
     print clf.best_score_
+    print clf.best_params_
+
     joblib.dump(clf, model)
 
 
