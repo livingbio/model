@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from collections import Counter
 from sklearn.preprocessing import Imputer
+from sklearn.preprocessing import MinMaxScaler
 from sklearn import preprocessing
 from sklearn.decomposition import PCA
 import scipy.sparse as sp
@@ -17,6 +18,19 @@ def imputer():
         vs.append([int(x) if x else numpy.NaN for x in iline])
 
     imp = Imputer(missing_values='NaN', strategy='mean', axis=0)
+    vs = imp.fit_transform(vs)
+
+    for v in vs:
+        print ",".join(map(str, map(int, v)))
+
+
+def scale(feature_range=(-128, 127), **kwargs):
+    vs = []
+    for iline in dio.io():
+        iline = iline.strip().split(',')
+        vs.append(map(int, iline))
+
+    imp = MinMaxScaler(feature_range, **kwargs)
     vs = imp.fit_transform(vs)
 
     for v in vs:
