@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from scipy.optimize import minimize
+#from scipy.optimize import minimize
 from dpipe import dio
 import kaggle_evl
 from functools import partial
@@ -42,7 +42,7 @@ def train():
     pred = []
 
     for iline in dio.io():
-        vs = iline.split(',')
+        vs = iline.strip().split(',')
         if len(vs) == 2:
             vs = map(float, vs)
             act.append(vs[0])
@@ -58,6 +58,14 @@ def train():
 
     with open('min.model', 'w') as ofile:
         ofile.write(','.join(map(str, res.x)))
-   
+
+def adjust(func):
+    func = eval(func)
+    for iline in dio.io():
+        act, pred = map(float, iline.strip().split(','))
+        adjust_pred = func(pred)
+
+        print act, ',', adjust_pred
+
 if __name__ == "__main__":
     dio.now()
