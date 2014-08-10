@@ -4,36 +4,17 @@ import fileinput
 from sklearn.ensemble import *
 from sklearn.cross_validation import cross_val_score
 from sklearn.externals import joblib
+from sklearn.grid_search import GridSearchCV
 from itertools import izip
 import os, sys
 from dpipe import dio
-from scipy.sparse import *
+from sklearn.metrics import fbeta_score, make_scorer
+from kaggle_evl import *
 
-def sparse_io():
-    row = []
-    col = []
-    data = []
-    target = []
-    for ri, iline in enumerate(dio.io()):
-        iline = iline.strip().split(',')
-        t = int(iline[0])
-        irow = map(int, iline[1:])
+def kaggle_score(act, predict):
+    return llfun(act, predict)
 
-        target.append(t)
-
-        for ci, v in enumerate(irow[:13]):
-            row.append(ri)
-            col.append(ci)
-            data.append(v)
-
-        for l in irow[13:]:
-            row.append(ri)
-            col.append(l+13)
-            data.append(1)
-
-    #print ri+1, max(col)
-    return train, csr_matrix((data, (row, col)), shape=(ri+1, max(col)+1))
-
+scorer = make_scorer(kaggle_score, greater_is_better=False)
 
 def io():
     target = []
@@ -51,12 +32,41 @@ def io():
             if l+13 < 1000:
                 k[l+13] = 1
 
-#        print v[:13], ls, k
         target.append(t)
         train.append(k)
 
-#    print target, train
     return target, train
+
+
+def fake(value=None, **kwargs):
+    target, train = io()
+
+    if value==None:
+        g = lambda: random.random()
+    elif isinstance(value, float):
+        g = lambda: 0 if random.random() < value else 1
+    else:
+        g = lambda: value
+
+    for a in target:
+        print a, ',', g()
+
+
+def grid_search(model):
+    target, train = io()
+    forest = RandomForestRegressor(n_jobs=-1)
+    parameters = {
+        "n_estimators":[10, 50, 100, 200],
+        "bootstrap" = [True, False],
+        "min_samples_split"= [1],
+        "max_depth"=[None],
+        "max_features"=["auto", None]
+    }
+    clf = grid_search.GridSearchCV(forest, parameters, scoring=scorer, n_jobs=-1)
+    clf.fit(train, target)
+
+    print clf.best_score_
+    joblib.dump(clf, model)
 
 
 def train(model, n_estimators = 100, **kwargs):
@@ -79,12 +89,13 @@ def predict(model):
 
     while tests:
         results =  clf.predict(tests[:10000])
-        del tests[:10000]
 
         for a, b in izip(ids, results):
-            print ','.join(map(str, [a, b]))
+            print a, ',', b
 
-        del ids[:10000]        
+        del ids[:10000]
+        del tests[:10000]
+
 
 if __name__ == "__main__":
     dio.now()
