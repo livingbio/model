@@ -34,7 +34,7 @@ def io():
 
         target.append(t)
         train_int.append(int_fs)
-        train_label.append({k:1 for k in label_fs})
+        train_label.append({k:1 for k in label_fs if k})
 
 #    print train_int
     imp = Imputer(missing_values='NaN', strategy='mean', axis=0)
@@ -68,14 +68,11 @@ def predict(model):
     clf = joblib.load(model)
     ids, tests = io()
 
-    while tests:
-        results = clf.predict_proba(tests[:10000])
+    results = clf.predict_proba(tests)
 
-        for a, b in izip(ids, results):
-            print a, ',', b
+    for a, b in izip(ids, results):
+        print a, ',',  b[1]
 
-        del ids[:10000]
-        del tests[:10000]
 
 if __name__ == "__main__":
     dio.now()
