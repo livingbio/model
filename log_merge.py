@@ -12,7 +12,7 @@ fields = ['user', 'imp', 'type', 'publisher', 'advertiser', 'slot', 'creative', 
 def merge():
     import fileinput
     write = csv.DictWriter(sys.stdout, fields+['click'])
-#    write.writeheader()
+    write.writeheader()
     reader = csv.DictReader(iter(sys.stdin.readline, ""), fields)
     last = {}
     click = 0

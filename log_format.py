@@ -25,6 +25,10 @@ def parser():
             tmp['time'] = data.get('start_time')
             tmp['imp'] = data.get('imp')
             tmp['user'] = data.get('user')
+            tmp['slot'] = data.get('slot')
+            tmp['creative'] = data.get('creative')
+            tmp['qm'] = data.get('qm')
+            tmp['qp'] = data.get('qp')
             
             assert tmp['imp'], 'no imp id'
 
