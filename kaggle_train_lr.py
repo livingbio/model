@@ -16,6 +16,13 @@ from sklearn.linear_model import LogisticRegression
 import numpy
 from sklearn.preprocessing import Imputer
 from sklearn import preprocessing
+from sklearn.metrics import make_scorer
+
+def kaggle_score(act, predict):
+    return llfun(act, predict)
+
+scorer = make_scorer(kaggle_score, greater_is_better=False)
+
 
 def io():
     hv = FeatureHasher()
@@ -53,22 +60,38 @@ def io():
 
 def train(model):
     target, train = io()
+#    print target, train
+#    print target
 
     lr = LogisticRegression()
-    lr.fit(train, target)
-    p = lr.predict_proba(train)
+    parameters = {
+        'penalty': ['l1', 'l2'],
+#        'dual': [True, False],
+#        'C': [1.0, 2.0]
+    }
+
+    clf = GridSearchCV(lr, parameters, scoring=scorer, n_jobs=-1)
+    clf.fit(train, target)
+
+    with open('search', 'w') as ofile:    
+        print >> ofile, clf.grid_scores_
+        print >> ofile, clf.best_score_
+        print >> ofile, clf.best_params_
+
+#    lr.fit(train, target)
+    p = clf.best_estimator_.predict_proba(train)
 
     for a, i in izip(target, p):
         print a, ',', i[1]
 
-    joblib.dump(lr, model)
+    joblib.dump(clf, model)
 
 
 def predict(model):
     clf = joblib.load(model)
     ids, tests = io()
 
-    results = clf.predict_proba(tests)
+    results = clf.best_estimator_.predict_proba(tests)
 
     for a, b in izip(ids, results):
         print a, ',',  b[1]
